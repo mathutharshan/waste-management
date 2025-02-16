@@ -53,7 +53,7 @@ const Drivers = () => {
                 <p className='text-gray-600 text-sm'>{item.speciality}</p>
               </div>
             </div>
-          ))}
+          ))}  
         </div>
       </div>
     </div>
