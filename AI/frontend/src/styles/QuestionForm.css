@@ -1,0 +1,126 @@
+/* QuestionForm.css */
+.question-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #2b5876, #4e4376);
+  font-family: 'Roboto', sans-serif;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.question-form__title {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #fff;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.question-form__subtitle {
+  font-size: 1rem;
+  color: #ccc;
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.question-form__form {
+  width: 100%;
+  max-width: 500px;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.question-form__group {
+  margin-bottom: 20px;
+}
+
+.question-form__label {
+  font-weight: bold;
+  color: #4e4376;
+  display: block;
+  margin-bottom: 5px;
+}
+
+.question-form__control {
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  padding: 10px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.question-form__button {
+  width: 100%;
+  background: linear-gradient(90deg, #2b5876, #4e4376);
+  color: #fff;
+  font-weight: bold;
+  border: none;
+  padding: 10px;
+  border-radius: 8px;
+  transition: background 0.3s ease;
+}
+
+.question-form__button:hover {
+  background: linear-gradient(90deg, #4e4376, #2b5876);
+}
+
+.question-form__alert {
+  width: 100%;
+  max-width: 500px;
+}
+
+
+
+
+/* Styling  Answer Modal */
+
+.modal-content {
+  border-radius: 15px;
+  background: linear-gradient(135deg, #ffffff, #f3f3f3);
+  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.3);
+  padding: 20px;
+}
+
+
+
+.modal-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin: 0;
+}
+
+.modal-body {
+  padding: 20px;
+  font-size: 1.2rem;
+  color: #4e4376;
+  line-height: 1.5;
+  text-align: center;
+}
+
+.modal-footer {
+  border-top: none;
+  padding: 15px;
+  display: flex;
+  justify-content: center;
+  background: #f7f7f7;
+  border-radius: 0 0 15px 15px;
+}
+
+.modal-footer button {
+  background: linear-gradient(90deg, #4e4376, #2b5876);
+  color: #fff;
+  font-weight: bold;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  transition: background 0.3s ease;
+}
+
+.modal-footer button:hover {
+  background: linear-gradient(90deg, #2b5876, #4e4376);
+}

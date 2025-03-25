@@ -89,4 +89,18 @@ const loginAdmin = async (req,res) =>{
     }
 }
 
-export { addDriver,loginAdmin };
+//API to get all driver list
+const allDrivers = async (req,res) =>{
+    try {
+         
+        const drivers = await driverModel.find({}).select('-password')
+        res.json({success:true,drivers})
+
+    } catch (error) {
+        console.log(error);
+        res.json({success:false,message:error.message})
+        
+    }
+}
+
+export { addDriver,loginAdmin,allDrivers };

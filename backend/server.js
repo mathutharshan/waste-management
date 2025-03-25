@@ -4,6 +4,8 @@ import dotenv from 'dotenv'
 import connectDB from './config/mongodb.js'
 import connectCloudinary from './config/cloudinary.js'
 import adminRouter from './routes/adminRoute.js'
+import driverRouter from './routes/driverRoute.js'
+import userRouter from './routes/userRoute.js'
 
 
 dotenv.config();
@@ -19,7 +21,9 @@ app.use(cors())
 
 //api endpoint
 app.use('/api/admin',adminRouter)
-//localhost:4000/api/admin//add-driver
+app.use('/api/driver',driverRouter)
+app.use('/api/user',userRouter)
+
 
 
 
