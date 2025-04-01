@@ -4,6 +4,8 @@ import {v2 as cloudinary} from "cloudinary"
 import driverModel from "../models/driverModel.js"
 import multer from 'multer';
 import jwt from 'jsonwebtoken'
+import appointmentModel from "../models/appoinmentModel.js";
+import userModel from "../models/userModel.js";
 
 
 
@@ -103,4 +105,65 @@ const allDrivers = async (req,res) =>{
     }
 }
 
-export { addDriver,loginAdmin,allDrivers };
+//API to get all appointment list
+const appointmentsAdmin = async (req,res) => {
+    try {
+        const appointments = await appointmentModel.find({})
+        res.json({success:true,appointments})
+    } catch (error) {
+        console.log(error);
+        res.json({success:false,message:error.message})
+    }
+}
+//API for appointment cancel
+const appointmentCancel = async (req,res) => {
+    try {
+        const { appointmentId} = req.body
+        const appointmentData = await appointmentModel.findById(appointmentId)
+
+        await appointmentModel.findByIdAndUpdate(appointmentId, {cancelled:true})
+
+        const {docId, slotDate, slotTime} = appointmentData
+        const driverdata = await driverModel.findById(docId)
+        let slots_booked = driverdata.slots_booked || {}
+
+        if (!slots_booked[slotDate]) {
+            return res.json({ success: false, message: `No slots found for ${slotDate}` })
+        }
+
+        slots_booked[slotDate] = slots_booked[slotDate].filter(e => e !== slotTime)
+        if (slots_booked[slotDate].length === 0) {
+            delete slots_booked[slotDate]
+        }
+
+        await driverModel.findByIdAndUpdate(docId, {slots_booked})
+
+        res.json({success:true, message:'Appointment cancelled'})
+    } catch (error) {
+        console.log(error)
+        res.json({success: false, message: error.message})
+    }
+}
+
+//API to get dashboard data for admin panel
+const adminDashboard = async (req,res) => {
+    try {
+        const drivers = await driverModel.find({})
+        const users = await userModel.find({})
+        const appointments = await appointmentModel.find({})
+
+        const dashData = {
+            drivers : drivers.length,
+            appointments: appointments.length,
+            users: users.length,
+            latestAppointments:appointments.reverse().slice(0,5)
+        }
+        res.json({success:true,dashData})
+
+    } catch (error) {
+        console.log(error)
+        res.json({success: false, message: error.message})
+    }
+}
+
+export { addDriver,loginAdmin,allDrivers, appointmentsAdmin, appointmentCancel, adminDashboard };

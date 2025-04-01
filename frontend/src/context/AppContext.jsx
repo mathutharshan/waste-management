@@ -56,7 +56,7 @@ const loadUserProfileData = async () => {
 
     useEffect(()=>{
         getDriversData()
-    })
+    },[])
     
     useEffect(()=>{
         if (token) {

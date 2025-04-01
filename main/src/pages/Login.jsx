@@ -2,6 +2,7 @@ import React, { useState, useContext } from 'react';
 import { AdminContext } from '../context/AdminContext';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import { DriverContext } from '../context/DriverContext';
 
 const Login = () => {
   const [state, setState] = useState('Admin');
@@ -9,24 +10,39 @@ const Login = () => {
   const [password, setPassword] = useState('');
 
   const { setAToken, backendUrl } = useContext(AdminContext);
+  const {setDToken} = useContext(DriverContext)
 
   const onSubmitHandler = async (event) => {
     event.preventDefault();
+  
     try {
-      const url = state === 'Admin' ? '/api/admin/login' : '/api/driver/login';
-      const { data } = await axios.post(backendUrl + url, { email, password });
-
-      if (data.success) {
-        localStorage.setItem('aToken', data.token);
-        setAToken(data.token);
-        toast.success('Login Successful!');
+      if (state === 'Admin') {
+        const { data } = await axios.post(backendUrl + '/api/admin/login', { email, password });
+        if (data.success) {
+          localStorage.setItem('aToken', data.token);
+          setAToken(data.token);
+          toast.success('Admin Login Successful!');
+        } else {
+          toast.error(data.message);
+        }
       } else {
-        toast.error(data.message);
+        const { data } = await axios.post(backendUrl + '/api/driver/login', { email, password });
+        if (data.success) {
+          localStorage.setItem('dToken', data.token);
+          setDToken(data.token);
+          console.log(data.token);  
+          toast.success('Driver Login Successful!');
+         
+          
+        } else {
+          toast.error(data.message);
+        }
       }
     } catch (error) {
       toast.error(error.response?.data?.message || 'Login failed! Please try again.');
     }
   };
+  
 
   return (
     <form className='min-h-[80vh] flex items-center' onSubmit={onSubmitHandler}>

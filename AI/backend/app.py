@@ -1,4 +1,7 @@
+from dotenv import load_dotenv
+load_dotenv()
 from fastapi import FastAPI, File, UploadFile, Form, HTTPException
+
 from fastapi.responses import JSONResponse
 from transformers import pipeline
 from PyPDF2 import PdfReader
@@ -6,7 +9,8 @@ from docx import Document
 import pandas as pd
 import os
 import torch
-from dotenv import load_dotenv
+
+
 import requests
 from fastapi.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient  # Import Motor for MongoDB
@@ -18,7 +22,7 @@ import asyncio
 from datetime import datetime
 
 # Initialize MongoDB client
-MONGODB_URL = os.getenv("MOMONGODB_URL")  # MongoDB connection string
+MONGODB_URL = os.getenv("MONGODB_URL") # MongoDB connection string
 mongo_client = AsyncIOMotorClient(MONGODB_URL)
 db = mongo_client["sample"]  # Replace with your database name
 files_collection = db["files"]  # Collection for storing file data
@@ -26,7 +30,6 @@ questions_collection = db["questions"]  # Collection for storing questions and a
 
 
 # Load environment variables from the .env file
-load_dotenv()
 
 # Initialize Gemin API credentials
 GEMIN_API_KEY = os.getenv("GEMIN_API_KEY")  # Your Gemin API key
@@ -48,12 +51,12 @@ app = FastAPI()
 # Add CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    #allow_origins=["http://localhost:3000"],  # Add the origin of your React app
-    allow_origins=["http://127.0.0.1:3000"],
+    allow_origins=["*"],  # ✅ Allow any origin (for development only!)
     allow_credentials=True,
-    allow_methods=["*"],  # Allow all HTTP methods
-    allow_headers=["*"],  # Allow all headers
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
+
 
 #Extract text content from supported file types (.txt, .pdf, .docx, .csv).
 def extract_text_from_file(file_path):

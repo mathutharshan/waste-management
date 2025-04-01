@@ -9,7 +9,7 @@ import axios from 'axios';
 const Report = () => {
 
 const {docId} = useParams()
-const {drivers,currencySymbol,backendUrl, token, getDriverData} = useContext(AppContext)
+const {drivers,currencySymbol,backendUrl, token, getDriversData} = useContext(AppContext)
 const daysOfWeek = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT']
 
 const navigate = useNavigate()
@@ -54,11 +54,24 @@ let timeSlots = []
   while(currentDate < endTime){
     let formattedTime = currentDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit'})
 
-     //add slot to array
-     timeSlots.push({
-      datetime: new Date(currentDate),
-      time: formattedTime
-     })
+    let day = currentDate.getDate()
+    let month = currentDate.getMonth()+1
+    let year = currentDate.getFullYear()
+
+
+    const slotDate = day + "_" + month + "_" + year;
+const slotTime = formattedTime;
+
+const isSlotAvailable = !(docInfo.slots_booked?.[slotDate]?.includes(slotTime));
+
+if (isSlotAvailable) {
+  timeSlots.push({
+    datetime: new Date(currentDate),
+    time: formattedTime
+  });
+}
+
+     
 
      //increment current time by 30 minutes
      currentDate.setMinutes(currentDate.getMinutes() + 30)
@@ -81,13 +94,13 @@ const bookAppointment = async () =>{
 
     const slotDate = day +"_"+ month + "_" + year
     
-    const { data } = await axios.post(backendUrl + '/api/user/book-appoinment',{docId, slotDate, slotTime}, {headers: {
+    const { data } = await axios.post(backendUrl + '/api/user/book-appointment',{docId, slotDate, slotTime}, {headers: {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
     }})
     if (data.success) {
       toast.success(data.message)
-      getDriverData()
+      getDriversData()
       navigate('/my-report')
 
     }else {
@@ -96,7 +109,8 @@ const bookAppointment = async () =>{
     
   } catch (error) {
     console.log(error);
-    
+    toast.error(error.message)
+
     
   }
 }
